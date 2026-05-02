@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SQ03 平方根のかけ算・わり算 - 演習 | GAMBA</title>
+
+<!-- KaTeX -->
+<link rel="stylesheet" href="../lib/katex/katex.min.css">
+<script defer src="../lib/katex/katex.min.js"></script>
+<script defer src="../lib/katex/contrib/auto-render.min.js"></script>
+
+<style>
+  :root{
+    --primary:#15803d;
+    --primary-dark:#166534;
+    --bg:#f0fdf4;
+    --border:#bbf7d0;
+    --accent:#fef3c7;
+    --accent-border:#fcd34d;
+    --text:#1f2937;
+    --muted:#6b7280;
+    --correct:#16a34a;
+    --wrong:#dc2626;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:"Hiragino Sans","Yu Gothic",sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    line-height:1.7;
+    padding:1rem;
+  }
+  .container{max-width:780px;margin:0 auto}
+
+  header{
+    background:var(--primary);
+    color:#fff;
+    padding:1.2rem 1.5rem;
+    border-radius:12px 12px 0 0;
+  }
+  header h1{font-size:1.4rem;margin-bottom:.25rem}
+  header .sub{font-size:.9rem;opacity:.9}
+
+  .nav{
+    display:flex;
+    background:#fff;
+    border-left:1px solid var(--border);
+    border-right:1px solid var(--border);
+    border-bottom:1px solid var(--border);
+  }
+  .nav a{
+    flex:1;
+    text-align:center;
+    padding:.7rem .5rem;
+    text-decoration:none;
+    color:var(--muted);
+    font-size:.85rem;
+    border-right:1px solid var(--border);
+    transition:background .2s;
+  }
+  .nav a:last-child{border-right:none}
+  .nav a:hover{background:var(--bg)}
+  .nav a.active{
+    background:var(--primary);
+    color:#fff;
+    font-weight:bold;
+  }
+
+  main{
+    background:#fff;
+    padding:1.8rem 1.5rem;
+    border-left:1px solid var(--border);
+    border-right:1px solid var(--border);
+    border-bottom:1px solid var(--border);
+    border-radius:0 0 12px 12px;
+  }
+
+  .set-label{
+    display:inline-block;
+    background:#fef3c7;
+    border:2px solid #fcd34d;
+    color:#b45309;
+    padding:.5rem 1.2rem;
+    border-radius:24px;
+    font-size:.95rem;
+    font-weight:bold;
+    margin-bottom:1rem;
+  }
+
+  .lead{
+    background:#eff6ff;
+    border-left:4px solid #2563eb;
+    padding:.8rem 1.1rem;
+    margin-bottom:1.2rem;
+    border-radius:0 8px 8px 0;
+    font-size:.95rem;
+  }
+  .lead .h{
+    font-weight:bold;
+    color:#1d4ed8;
+    margin-bottom:.3rem;
+  }
+
+  .controls{
+    display:flex;
+    gap:.6rem;
+    flex-wrap:wrap;
+    margin:1rem 0;
+    justify-content:center;
+  }
+  .btn{
+    padding:.7rem 1.4rem;
+    border:none;
+    border-radius:8px;
+    font-size:.95rem;
+    font-weight:bold;
+    cursor:pointer;
+    transition:all .2s;
+  }
+  .btn-primary{background:var(--primary);color:#fff}
+  .btn-primary:hover{background:var(--primary-dark)}
+  .btn-sub{background:#3b82f6;color:#fff}
+  .btn-sub:hover{background:#2563eb}
+  .btn-grade{background:#d97706;color:#fff}
+  .btn-grade:hover{background:#b45309}
+
+  .problem{
+    background:#fff;
+    border:2px solid var(--border);
+    border-radius:12px;
+    padding:1rem 1.2rem;
+    margin:1rem 0;
+  }
+  .problem-head{
+    display:flex;
+    align-items:center;
+    gap:.7rem;
+    margin-bottom:.7rem;
+  }
+  .q-no{
+    background:var(--primary);
+    color:#fff;
+    width:30px;
+    height:30px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:.9rem;
+    font-weight:bold;
+    flex-shrink:0;
+  }
+  .q-text{
+    flex:1;
+    font-size:1.05rem;
+  }
+
+  .choices{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:.5rem;
+    margin-top:.5rem;
+  }
+  .choice{
+    display:flex;
+    align-items:center;
+    gap:.5rem;
+    padding:.6rem .9rem;
+    background:#fff;
+    border:2px solid var(--border);
+    border-radius:8px;
+    cursor:pointer;
+    transition:all .15s;
+    font-size:1rem;
+  }
+  .choice:hover{
+    background:var(--bg);
+    border-color:var(--primary);
+  }
+  .choice input[type="radio"]{
+    margin:0;
+    accent-color:var(--primary);
+    flex-shrink:0;
+  }
+  .choice.selected{
+    background:#dcfce7;
+    border-color:var(--primary);
+  }
+  .choice.correct{
+    background:#dcfce7;
+    border-color:var(--correct);
+  }
+  .choice.wrong{
+    background:#fee2e2;
+    border-color:var(--wrong);
+  }
+  .choice.disabled{
+    cursor:default;
+    opacity:.85;
+  }
+  .choice-label{
+    background:var(--primary);
+    color:#fff;
+    width:22px;
+    height:22px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:.8rem;
+    font-weight:bold;
+    flex-shrink:0;
+  }
+
+  .explain{
+    margin-top:.7rem;
+    padding:.7rem .9rem;
+    background:#fef3c7;
+    border-left:3px solid #fcd34d;
+    border-radius:0 6px 6px 0;
+    font-size:.92rem;
+    display:none;
+  }
+  .explain.show{display:block}
+  .explain .h{
+    font-weight:bold;
+    color:#b45309;
+    margin-bottom:.3rem;
+  }
+
+  .result{
+    background:#ecfdf5;
+    border:2px solid var(--primary);
+    border-radius:10px;
+    padding:1.2rem;
+    margin-top:1.2rem;
+    text-align:center;
+    display:none;
+  }
+  .result.show{display:block}
+  .result.perfect{
+    background:#fef3c7;
+    border-color:#f59e0b;
+  }
+  .result .score{
+    font-size:1.4rem;
+    font-weight:bold;
+    color:var(--primary-dark);
+    margin-bottom:.4rem;
+  }
+  .result.perfect .score{color:#b45309}
+  .result .msg{
+    color:var(--text);
+  }
+
+  footer{
+    text-align:center;
+    margin-top:1.5rem;
+    color:var(--muted);
+    font-size:.85rem;
+  }
+  footer a{
+    color:var(--primary);
+    text-decoration:none;
+    margin:0 .5rem;
+  }
+  footer a:hover{text-decoration:underline}
+
+  @media (max-width:600px){
+    .nav a{font-size:.75rem;padding:.6rem .3rem}
+    header h1{font-size:1.2rem}
+    .choices{grid-template-columns:1fr}
+    .q-text{font-size:1rem}
+  }
+</style>
+</head>
+<body>
+<canvas id="confetti-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;display:none"></canvas>
+<div class="container">
+
+<header>
+  <h1>SQ03　平方根のかけ算・わり算</h1>
+  <div class="sub">📝 演習 — 4択 × 4問 × 3セット</div>
+</header>
+
+<nav class="nav">
+  <a href="intro.html">📘 導入</a>
+  <a href="example.html">✏️ 例題</a>
+  <a href="drill.html" class="active">📝 演習</a>
+  <a href="check.html">✅ 確認</a>
+</nav>
+
+<main>
+
+<div id="set-label" class="set-label">📚 セット 1：基本のかけ算</div>
+
+<div class="lead">
+  <div class="h">📌 演習について</div>
+  <p>4つの選択肢から正しい答えを選んでください。何度でもチャレンジできます。</p>
+</div>
+
+<div id="problems"></div>
+
+<div class="controls">
+  <button class="btn btn-grade" onclick="grade()">採点する</button>
+  <button class="btn btn-sub" onclick="resetCurrent()">もう一度</button>
+  <button class="btn btn-primary" onclick="nextSet()">別のセットに切替</button>
+</div>
+
+<div class="result" id="result">
+  <div class="score" id="score"></div>
+  <div class="msg" id="msg"></div>
+</div>
+
+</main>
+
+<footer>
+  <a href="../gamba_chugaku.html">🏠 中学数学トップ</a>
+  <a href="example.html">← 例題</a>
+  <a href="check.html">確認テストへ →</a>
+</footer>
+
+</div>
+
+<script>
+const SETS = [
+  {
+    title: '📚 セット 1：基本のかけ算',
+    problems: [
+      {
+        q: '$\\sqrt{2} \\times \\sqrt{7}$ を計算しなさい。',
+        choices: ['$\\sqrt{9}$', '$\\sqrt{14}$', '$14$', '$\\sqrt{72}$'],
+        correct: 1,
+        explain: '$\\sqrt{a} \\times \\sqrt{b} = \\sqrt{ab}$ より，$\\sqrt{2 \\times 7} = \\sqrt{14}$。14は平方数ではないので $\\sqrt{14}$ のまま。'
+      },
+      {
+        q: '$\\sqrt{5} \\times \\sqrt{3}$ を計算しなさい。',
+        choices: ['$\\sqrt{8}$', '$\\sqrt{15}$', '$15$', '$8$'],
+        correct: 1,
+        explain: '$\\sqrt{5} \\times \\sqrt{3} = \\sqrt{5 \\times 3} = \\sqrt{15}$。15は平方数ではないので $\\sqrt{15}$ のまま。'
+      },
+      {
+        q: '$\\sqrt{6} \\times \\sqrt{6}$ を計算しなさい。',
+        choices: ['$\\sqrt{12}$', '$\\sqrt{6}$', '$6$', '$36$'],
+        correct: 2,
+        explain: '同じ数のルートどうしのかけ算は，<strong>中の数そのもの</strong>になります。$\\sqrt{a} \\times \\sqrt{a} = a$ より，$\\sqrt{6} \\times \\sqrt{6} = 6$。'
+      },
+      {
+        q: '$\\sqrt{2} \\times \\sqrt{8}$ を計算しなさい。',
+        choices: ['$\\sqrt{10}$', '$\\sqrt{16}$', '$4$', '$16$'],
+        correct: 2,
+        explain: '$\\sqrt{2} \\times \\sqrt{8} = \\sqrt{16}$。$16 = 4^2$ なので $\\sqrt{16} = 4$。整数に化けるパターン！'
+      }
+    ]
+  },
+  {
+    title: '📚 セット 2:かけ算とわり算ミックス',
+    problems: [
+      {
+        q: '$\\sqrt{3} \\times \\sqrt{27}$ を計算しなさい。',
+        choices: ['$\\sqrt{30}$', '$3\\sqrt{3}$', '$9$', '$81$'],
+        correct: 2,
+        explain: '$\\sqrt{3} \\times \\sqrt{27} = \\sqrt{81}$。$81 = 9^2$ なので $\\sqrt{81} = 9$。'
+      },
+      {
+        q: '$\\sqrt{45} \\div \\sqrt{5}$ を計算しなさい。',
+        choices: ['$3$', '$9$', '$\\sqrt{9}$', '$\\sqrt{40}$'],
+        correct: 0,
+        explain: '$\\sqrt{45} \\div \\sqrt{5} = \\sqrt{\\dfrac{45}{5}} = \\sqrt{9} = 3$。'
+      },
+      {
+        q: '$\\sqrt{72} \\div \\sqrt{2}$ を計算しなさい。',
+        choices: ['$36$', '$6$', '$\\sqrt{36}$', '$\\sqrt{70}$'],
+        correct: 1,
+        explain: '$\\sqrt{72} \\div \\sqrt{2} = \\sqrt{\\dfrac{72}{2}} = \\sqrt{36} = 6$。'
+      },
+      {
+        q: '$\\sqrt{10} \\times \\sqrt{10}$ を計算しなさい。',
+        choices: ['$\\sqrt{10}$', '$\\sqrt{20}$', '$10$', '$100$'],
+        correct: 2,
+        explain: '$\\sqrt{a} \\times \\sqrt{a} = a$ より，$\\sqrt{10} \\times \\sqrt{10} = 10$。'
+      }
+    ]
+  },
+  {
+    title: '📚 セット 3:係数つきの計算',
+    problems: [
+      {
+        q: '$2\\sqrt{3} \\times \\sqrt{5}$ を計算しなさい。',
+        choices: ['$2\\sqrt{8}$', '$\\sqrt{30}$', '$2\\sqrt{15}$', '$10\\sqrt{3}$'],
+        correct: 2,
+        explain: '係数 2 はそのまま，ルート同士をかけて $\\sqrt{3} \\times \\sqrt{5} = \\sqrt{15}$。よって $2\\sqrt{15}$。'
+      },
+      {
+        q: '$3\\sqrt{2} \\times 2\\sqrt{3}$ を計算しなさい。',
+        choices: ['$5\\sqrt{6}$', '$6\\sqrt{6}$', '$5\\sqrt{5}$', '$6\\sqrt{5}$'],
+        correct: 1,
+        explain: '係数どうし：$3 \\times 2 = 6$，ルートどうし：$\\sqrt{2} \\times \\sqrt{3} = \\sqrt{6}$。まとめて $6\\sqrt{6}$。'
+      },
+      {
+        q: '$4\\sqrt{5} \\times \\sqrt{5}$ を計算しなさい。',
+        choices: ['$4\\sqrt{5}$', '$4\\sqrt{10}$', '$20$', '$25$'],
+        correct: 2,
+        explain: '$\\sqrt{5} \\times \\sqrt{5} = 5$，係数の 4 と合わせて $4 \\times 5 = 20$。'
+      },
+      {
+        q: '$5\\sqrt{6} \\div \\sqrt{6}$ を計算しなさい。',
+        choices: ['$5$', '$\\sqrt{5}$', '$5\\sqrt{6}$', '$\\sqrt{30}$'],
+        correct: 0,
+        explain: 'ルートどうしが消えて，係数 5 だけが残ります。$\\dfrac{5\\sqrt{6}}{\\sqrt{6}} = 5$。'
+      }
+    ]
+  }
+];
+
+let currentSet = 0;
+let currentOrder = [];
+let answers = [];
+let graded = false;
+
+function shuffleArray(arr){
+  const r = arr.slice();
+  for(let i=r.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [r[i],r[j]] = [r[j],r[i]];
+  }
+  return r;
+}
+
+function loadSet(idx){
+  currentSet = idx;
+  const set = SETS[idx];
+  document.getElementById('set-label').textContent = set.title;
+
+  currentOrder = shuffleArray(set.problems.slice());
+  answers = new Array(currentOrder.length).fill(null);
+  graded = false;
+
+  renderQuiz();
+  document.getElementById('result').classList.remove('show', 'perfect');
+}
+
+function renderQuiz(){
+  const container = document.getElementById('problems');
+  container.innerHTML = '';
+  const labels = ['ア','イ','ウ','エ'];
+
+  currentOrder.forEach((quiz, qi)=>{
+    const div = document.createElement('div');
+    div.className = 'problem';
+    let choicesHtml = '';
+    quiz.choices.forEach((c, ci)=>{
+      choicesHtml += `
+        <label class="choice" data-q="${qi}" data-c="${ci}" onclick="select(${qi},${ci})">
+          <input type="radio" name="q${qi}" value="${ci}">
+          <span class="choice-label">${labels[ci]}</span>
+          <span class="choice-text">${c}</span>
+        </label>
+      `;
+    });
+    div.innerHTML = `
+      <div class="problem-head">
+        <div class="q-no">${qi+1}</div>
+        <div class="q-text">${quiz.q}</div>
+      </div>
+      <div class="choices">${choicesHtml}</div>
+      <div class="explain" id="ex${qi}">
+        <div class="h">解説</div>
+        <div>${quiz.explain}</div>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+
+  if(window.renderMathInElement){
+    renderMathInElement(container, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false}
+      ]
+    });
+  }
+}
+
+function select(qi, ci){
+  if(graded) return;
+  answers[qi] = ci;
+  // ラジオボタンを明示的にチェック
+  const radio = document.querySelector(`input[name="q${qi}"][value="${ci}"]`);
+  if(radio) radio.checked = true;
+  // 視覚的な選択ハイライト
+  document.querySelectorAll(`.choice[data-q="${qi}"]`).forEach(el=>{
+    el.classList.remove('selected');
+  });
+  document.querySelector(`.choice[data-q="${qi}"][data-c="${ci}"]`).classList.add('selected');
+}
+
+function grade(){
+  const unanswered = answers.findIndex(a => a === null);
+  if(unanswered !== -1){
+    alert('問 ' + (unanswered+1) + ' がまだ未回答です。すべての問題に答えてから採点してください。');
+    return;
+  }
+
+  graded = true;
+  let correct = 0;
+
+  currentOrder.forEach((quiz, qi)=>{
+    const userAns = answers[qi];
+    const correctAns = quiz.correct;
+
+    document.querySelectorAll(`.choice[data-q="${qi}"]`).forEach(el=>{
+      el.classList.add('disabled');
+      el.classList.remove('selected');
+      const radio = el.querySelector('input[type="radio"]');
+      if(radio) radio.disabled = true;
+    });
+
+    document.querySelector(`.choice[data-q="${qi}"][data-c="${correctAns}"]`).classList.add('correct');
+
+    if(userAns === correctAns){
+      correct++;
+    } else {
+      document.querySelector(`.choice[data-q="${qi}"][data-c="${userAns}"]`).classList.add('wrong');
+    }
+
+    document.getElementById('ex'+qi).classList.add('show');
+  });
+
+  const result = document.getElementById('result');
+  const score = document.getElementById('score');
+  const msg = document.getElementById('msg');
+  const total = currentOrder.length;
+
+  result.classList.remove('perfect');
+  score.textContent = 'スコア：' + correct + ' / ' + total + ' 問';
+
+  if(correct === total){
+    result.classList.add('perfect');
+    msg.textContent = '🎉 全問正解！　完璧です。';
+    launchConfetti();
+  } else if(correct === 3){
+    msg.textContent = '✨ もう少し！　解説を見て，もう一度チャレンジしてみましょう。';
+  } else if(correct >= 1){
+    msg.textContent = '💪 解説をしっかり読んで，計算ルールを再確認しましょう。';
+  } else {
+    msg.textContent = '📘 例題に戻って，計算ルールを確認してから戻ってきましょう。';
+  }
+  result.classList.add('show');
+}
+
+function resetCurrent(){
+  loadSet(currentSet);
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function nextSet(){
+  const next = (currentSet + 1) % SETS.length;
+  loadSet(next);
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+window.addEventListener('load', ()=>{
+  setTimeout(()=>loadSet(0), 100);
+});
+
+/* ── 花吹雪エフェクト ── */
+function launchConfetti(){
+  const canvas = document.getElementById('confetti-canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.style.display = 'block';
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const colors = ['#fbbf24','#f59e0b','#dc2626','#16a34a','#2563eb','#9333ea','#ec4899','#15803d'];
+  const particles = [];
+  const particleCount = 150;
+
+  // 紙吹雪を生成
+  for(let i = 0; i < particleCount; i++){
+    particles.push({
+      x: Math.random() * canvas.width,
+      y: -Math.random() * canvas.height * 0.5 - 20,
+      w: Math.random() * 8 + 6,
+      h: Math.random() * 4 + 3,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      vx: (Math.random() - 0.5) * 4,
+      vy: Math.random() * 3 + 2,
+      rot: Math.random() * Math.PI * 2,
+      vrot: (Math.random() - 0.5) * 0.2
+    });
+  }
+
+  let startTime = Date.now();
+  const duration = 4000; // 4秒間
+
+  function animate(){
+    const elapsed = Date.now() - startTime;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    particles.forEach(p=>{
+      // 物理シミュレーション
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += 0.08; // 重力
+      p.vx *= 0.99; // 空気抵抗
+      p.rot += p.vrot;
+
+      // 描画
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+      ctx.restore();
+    });
+
+    if(elapsed < duration){
+      requestAnimationFrame(animate);
+    } else {
+      // 終了
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      canvas.style.display = 'none';
+    }
+  }
+
+  animate();
+}
+</script>
+
+<script src="../gamba_support.js"></script>
+</body>
+</html>
